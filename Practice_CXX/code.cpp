@@ -7,6 +7,8 @@
 
 #include "code.hpp"
 #include <iostream>
+#include <string>
+#include <cstring>
 
 void namespace_1(void) {
     std::cout << "1" << std::endl;
@@ -251,7 +253,18 @@ void array_2(void) {
     int cards[4] = {}; // {0, 0, 0, 0}
     cards[2] = 4; // legal
 //    cards[10] = 5; // Warning: Array index 10 is past the end of the array (which contains 4 elements)
-//    cards = {0, 0, 0, 0}; // illegal
+    
+//    cards = {0, 0, 0, 7}; // Array Assignment is not available on C.
+    
+    int a[4] = {0, 0, 0, 7};
+    
+//    cards = a; // Array Assignment is not available on C.
+    
+    memcpy(&cards, &a, sizeof(a)); //
+    
+    for (int i=0; i<4; i++) {
+        std::cout << a[i] << std::endl; // {0, 0, 0, 7}
+    }
 }
 
 void array_3(void) {
@@ -367,4 +380,425 @@ void cin_clear_1(void) {
     cout << "return to clear." << endl;
     cin.get();
     cin.clear();
+}
+
+void miscellaneous_1(void) {
+    using namespace std;
+    cout << "What year was your house build?\n";
+    int year;
+    cin >> year;
+    cout << "What is its street address?\n";
+    char address[80];
+    
+    // You never get the opportunity to enter the address.
+    // The fix is to read and discard the newline before reading the address.
+    cin.getline(address, 80);
+    cout << "Year built: " << year << endl;
+    cout << "Address: " << address << endl;
+    cout << "Done!\n";
+}
+
+void miscellaneous_2(void) {
+    using namespace std;
+    cout << "What year was your house build?\n";
+    int year;
+    cin >> year;
+    
+    cin.get(); // Enter를 대신 먹어줌
+    
+    cout << "What is its street address?\n";
+    char address[80];
+    
+    cin.getline(address, 80);
+    cout << "Year built: " << year << endl;
+    cout << "Address: " << address << endl;
+    cout << "Done!\n";
+}
+
+void string_2(void) {
+    char first_date[] = {"Le Chapon Dodu"};
+    char second_date[] = {"The Elegant Plate"};
+    std::string third_date = {"The Bread Bowl"};
+    std::string fourth_date {"Hank's Fine Eats"};
+}
+
+void string_3(void) {
+    char charr1[20];
+    char charr2[20] = "jaguar";
+    std::string str1;
+    std::string str2 = "panther";
+    
+//    charr1 = charr2; // Array Assignment is not available on C.
+    str1 = str2; // valid: Object Assignment
+}
+
+void string_4(void) {
+    // Appending Strings
+    using namespace std;
+    
+    string a = "A";
+    string b = "B";
+    string c = a + b;
+    c += a;
+    
+    cout << c << endl; // ABA
+    
+    //
+    
+    char charr1[5] = "Test";
+    char charr2[5] = "Test";
+    char charr3[9];
+    strcpy(charr3, charr1);
+    strcat(charr3, charr2);
+    
+    cout << charr3 << endl; // TestTest
+}
+
+void string_5(void) {
+    // length of strings
+    char charr1[20] = "Test";
+    std::string string1 = "Test";
+    
+    std::cout << sizeof(charr1) << std::endl; // 20
+    std::cout << strlen(charr1) << std::endl; // 4
+    std::cout << string1.size() << std::endl; // 4
+}
+
+void string_6(void) {
+    wchar_t title[] = L"Chief Astrogator";
+    char16_t name[] = u"Felonia Ripova";
+    char32_t car[] = U"Humber Super Snipe";
+}
+
+void string_7(void) {
+    // Raw String
+    // R와 () 괄호가 무조건 있어야 함
+    
+    std::cout << R"(Jim "King" uses "\n" instead of endl.)" << '\n';
+    
+    // is equivalent to...
+    
+    std::cout << "Jim \"King\" uses \"\\n\" instead of endl." << '\n';
+    
+    // ... 위 문법은 "( /* */ )" 처럼 "와 (로 시작해야 하므로,
+    // "(Who wouldn't)"
+    // 같은 문장을 표현할 수 없으므로, "와 ( 사이에 +*을 넣으면 더 엄밀하게 정의할 수 있다.
+    
+    std::cout << R"+*("(Who wouldn't?)", she whispered.)+*" << std::endl;
+}
+
+void structure_1(void) {
+    struct inflactable {
+        char name[20];
+        float volume;
+        double price;
+    };
+    
+    struct inflactable goose; // keyword struct required in C
+    
+    // keyword struct not required in C++
+    inflactable hat;
+    inflactable woopie_cushion;
+    inflactable mainframe;
+}
+
+void structure_2(void) {
+    struct inflactable {
+        char name[20];
+        std::string name2;
+        float volume;
+        double price;
+    };
+    
+    inflactable guest = {
+        "Glorious Gloria",
+        "",
+        1.88,
+        29.99
+    };
+    
+    inflactable pal = {
+        "Andacious Arthur",
+        "",
+        3.12,
+        32.99
+    };
+    
+    inflactable duck {"Daphne", "", 0.12, 9.98}; // can omit the = in C++11
+    
+    pal = duck; // assign
+    
+    using namespace std;
+    
+    cout << guest.name << endl; // Glorious Gloria
+    cout << pal.volume << endl; // 0.12
+}
+
+void structure_3(void) {
+    struct perks {
+        int key_number;
+        char car[12];
+    } mr_smith, ms_jones; // define struct type and assign with zero values.
+    
+    struct perks_2 {
+        int key_number;
+        char car[12];
+    } mr_glitz = {
+        7,
+        "Packard"
+    }; // define struct type and assign values directly;
+    
+    struct perks a;
+    struct perks_2 b;
+    
+    // also we can define struct with no tag
+    struct {
+        int x;
+        int y;
+    } position = { 0, 0 };
+    
+    struct {
+        int x;
+        int y;
+    } const position_2 = { 0, 0 };
+}
+
+void structure_4(void) {
+    struct inflactable {
+        char name[20];
+        float volume;
+        double price;
+    };
+    
+    // Array of struct
+    inflactable guests[2] = {
+        {"Bambi", 0.5, 21.99},
+        {"Godzilla", 2000, 565.99}
+    };
+    
+    inflactable guests_2[4] = {};
+    
+    inflactable guests_3[5] = {
+        {"A", 0.1, 0.4}
+    };
+    
+    struct {
+        int x;
+        int y;
+    } const position[2] = { {0, 0}, {3, 9} };
+}
+
+void structure_5(void) {
+    // declare bit fields
+    struct torgle_register {
+        unsigned int SN : 4;
+        unsigned int a : 100; // Warning: Width of bit-field 'a' (100 bits) exceeds the width of its type; value will be truncated to 32 bits
+        // 경고가 뜨지만 상관 없음 - 데이터 크기만 불필요하게 커지는 것 뿐
+        
+        unsigned int : 4; // 4 bits unused.
+        bool goodIn : 1;
+    } torgle = { 4, 5, true };
+    
+    std::cout << torgle.goodIn << std::endl; // 1
+}
+
+void union_1(void) {
+    union one4all {
+        int int_val;
+        long long_val;
+        double double_val;
+    };
+    
+    using namespace std;
+    
+    one4all pail;
+    pail.int_val = 15;
+    cout << pail.int_val << endl;
+    
+    pail.double_val = 1.38;
+    cout << pail.double_val << endl; // 1.38
+    cout << pail.int_val << endl; // -515396076
+    
+    //
+    
+    cout << sizeof(static_cast<int>(1)) << endl; // 4
+    cout << sizeof(static_cast<long>(1)) << endl; // 8
+    cout << sizeof(static_cast<double>(1.0)) << endl; // 8
+    
+    // 4, 8, 8 -> 8이 최대이므로
+    cout << sizeof(pail) << endl; // 8
+}
+
+void union_2(void) {
+    struct widget {
+        char brand[20];
+        
+        enum data_type {
+            num = 0,
+            charr = 1
+        } type;
+        
+        union id {
+            long id_num;
+            char id_char[20];
+        } id_val;
+    };
+    
+    widget prize;
+    
+    char const id_char[5] = "Test";
+    
+    strcpy(prize.id_val.id_char, id_char);
+    // 같음
+//    strncpy(prize.id_val.id_char, id_char, sizeof(prize.id_val.id_char));
+//    memcpy(&(prize.id_val.id_char), &id_char, sizeof(prize.id_val.id_char));
+    
+    prize.type = widget::charr;
+    
+    switch (prize.type) {
+        case widget::num:
+            std::cout << prize.id_val.id_num << std::endl; // Never called.
+            break;
+        case widget::charr:
+            std::cout << prize.id_val.id_char << std::endl; // Test
+            break;
+        default:
+            break;
+    }
+}
+
+void enumeration_1(void) {
+    enum spectrum { red = 5, orange, yellow, green, blue, violet, indigo, unltraviolet };
+    
+    std::cout << orange << std::endl; // 6
+    
+    spectrum band;
+    
+    band = blue;
+//    band = 3; // Assigning to 'spectrum' from incompatible type 'int'
+    band = static_cast<spectrum>(30);
+    
+    std::cout << band << std::endl; // 30
+    
+    //
+    
+    // Type Cast
+    band = (spectrum)8;
+    band = spectrum(7);
+    band = spectrum(3);
+    band = spectrum(100);
+    band = (spectrum)200;
+    
+//    ++band; // Cannot increment expression of enum type 'spectrum'
+    band = static_cast<spectrum>(band + 1);
+    
+    
+//    band = orange + red; // Assigning to 'spectrum' from incompatible type 'int'
+    band = static_cast<spectrum>(orange + red);
+    
+    //
+    
+    int color = blue;
+    color = 3;
+    color = 3 + red;
+}
+
+void enumeration_2(void) {
+    enum { a = 0, b, c, d, e = 1 };
+    std::cout << a << std::endl; // 0
+    std::cout << b << std::endl; // 1
+    std::cout << c << std::endl; // 2
+    std::cout << d << std::endl; // 3
+    std::cout << e << std::endl; // 1
+}
+
+void malloc_1(void) {
+    char *charr;
+    void *p = malloc(5);
+    charr = static_cast<char *>(p);
+    
+    char charr_2[5] = "ABCD";
+    
+    strcpy(charr, charr_2);
+//    memcpy(charr, &charr_2, sizeof(&p));
+    
+    std::cout << charr << std::endl; // ABCD
+    
+    free(charr);
+}
+
+void new_delete_1(void) {
+    using namespace std;
+    int nights = 1001;
+    int * pt = new int;
+    *pt = nights;
+    
+    delete pt;
+//    delete pt; // unsafe
+    
+    int * pt_2 = nullptr;
+    delete pt_2; // safe
+}
+
+void new_delete_2() {
+    int * psome = new int [10];
+    delete [] psome;
+}
+
+void pointer_1() {
+    using namespace std;
+    
+    double wages[3] = {10000.0, 20000.0, 30000.0};
+    short stacks[3] = {3, 2, 1};
+    
+    // Here are two ways to get the address of an array
+    double *pw = wages;
+    short *ps = &stacks[0];
+    
+    // with array element
+    cout << *pw << endl; // 10000
+    // int는 크기가 4 이므로, 포인터에 1을 더하면 자동으로 4 * 1이 더해짐
+    ++pw; // size of double type is 8, incrementing 1 is equal to 8.
+    cout << *pw << endl; // 20000
+    pw += 1;
+    cout << *pw << endl; // 30000
+    
+    //
+    
+    cout << *(stacks + 1) << endl; // 2
+    *(stacks + 2) = 6;
+    cout << *(stacks + 2) << endl; // 6
+    stacks[1] = 7;
+    cout << *(stacks + 1) << endl; // 7
+    cout << stacks[1] << endl; // 7
+}
+
+void pointer_2() {
+    int tacos[10] = {5, 2, 8, 4, 1, 2, 2, 4, 6, 8};
+    int *pt = tacos;
+    ++pt;
+    int *pe = &tacos[9];
+    --pe;
+    
+    // 28이지만, int는 크기가 4이므로 28 / 4 = 7
+    int diff = pe - pt;
+    std::cout << diff << std::endl; // 7
+}
+
+void pointer_3() {
+    struct inflactable {
+        char name[20];
+        float volume;
+        double price;
+    } value = {};
+    
+    struct inflactable *pt = &value;
+    
+    strcpy(pt->name, "Test");
+    
+    std::cout << value.name << std::endl; // Test
+}
+
+void run(void) {
+    pointer_3();
 }

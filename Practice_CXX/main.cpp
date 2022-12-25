@@ -9,6 +9,6 @@
 #include "code.hpp"
 
 int main(int argc, const char * argv[]) {
-    cin_getline_1();
+    run();
     return 0;
 }
