@@ -9,6 +9,8 @@
 #include <iostream>
 #include <string>
 #include <cstring>
+#include <vector>
+#include <array>
 
 void namespace_1(void) {
     std::cout << "1" << std::endl;
@@ -799,6 +801,225 @@ void pointer_3() {
     std::cout << value.name << std::endl; // Test
 }
 
+void vector_1() {
+    std::vector<int> vi;
+    std::vector<double> vd(10);
+}
+
+void array_7() {
+    // array uses the stack, and requires fixed size.
+    std::array<int, 5> ai;
+    std::array<double, 4> ad = {1.2, 2.1, 3.43, 4.3};
+}
+
+void vector_vs_array_1() {
+    using namespace std;
+    
+    // C, original C++
+    double a1[4] = {1.2, 2.4, 3.6, 4.8};
+    
+    // C+98 STL
+    // error - no simple way to initialize in C98
+//    vector<double> a2(4) = {1.2, 3.4, 3.4, 3.5};
+    vector<double> a2(4);
+    a2[0] = 3.0;
+    a2[1] = 1.0 / 5.0;
+    a2[2] = 0.5;
+    a2[3] = 0.1;
+    
+    // C+11 - array
+    array<double, 4> a3 = {3.14, 2.72, 1.62, 1.41};
+    array<double, 4> a4;
+    a4 = a3; // valid!
+    
+    //
+    
+    cout << a1[2] << endl; // 3.6
+    cout << a2[2] << endl; // 0.5
+    cout << a3[2] << endl; // 1.62
+    cout << a4[2] << endl; // 1.62
+    
+    cout << a1[-2] << endl; // 5.21502e-310
+    cout << a2[-2] << endl; // 3.46668e-32
+    cout << a3[-2] << endl; // 1.62
+    cout << a4[-2] << endl; // 3.04933e-314
+}
+
+void for_loop_1() {
+    using namespace std;
+    int i;
+    
+    // for (initialization; test-expression; update-expression)
+    for (i = 0; i < 5; i++)
+        cout << "C++ knows loops \n";
+    cout << "C++ knows when to stop.\n";
+}
+
+void for_loop_2() {
+    using namespace std;
+    cout << "Enter the starting countdown value: ";
+    int limit;
+    cin >> limit;
+    int i;
+    for (i = limit; i; i--) // quits when i is 0
+        cout << "i = " << i << endl;
+    cout << "Done now that i = " << i << endl;
+}
+
+void block_1() {
+    using namespace std;
+    int x = 20;
+    {
+        cout << x << endl; // 20
+        int x = 100;
+        cout << x << endl; // 100
+    }
+    cout << x << endl; // 20
+}
+
+void for_loop_5() {
+    using namespace std;
+    cout << "Enter a word: ";
+    string word;
+    cin >> word;
+    
+    // physically modify string object
+    char temp;
+    unsigned long i, j;
+    for (j = 0, i = word.size() - 1; j < i; --i, ++j) {
+        temp = word[i];
+        word[i] = word[j];
+        word[j] = temp;
+    }
+    
+    // Test -> tesT -> tseT
+    cout << word << "\nDone\n";
+}
+
+void for_loop_6() {
+    using namespace std;
+    int quizscores[10] = { 20, 20, 20, 20, 20, 19, 20, 18, 20, 20 };
+    int i;
+    
+    // 6번째가 19이므로, 5번째까지만 출력됨
+    for (i = 0; quizscores[i] == 20; i++)
+        cout << "quiz " << i << " is a 20\n";
+}
+
+void compare_string_1() {
+    char word[5] = "?ate";
+    
+    for (char ch = 'a'; strcmp(word, "mate"); ch++) {
+        std::cout << word << std::endl;
+        word[0] = ch;
+    }
+    
+    std::cout << word << std::endl;
+    
+    /*
+     ?ate
+     aate
+     bate
+     cate
+     date
+     eate
+     fate
+     gate
+     hate
+     iate
+     jate
+     kate
+     late
+     mate
+     */
+}
+
+void compare_string_2() {
+    using namespace std;
+    string word = "?ate";
+    
+    // char와 다르게, cpp string은 operator로 바로 비교 가능
+    for (char ch = 'a'; word != "mate"; ch++) {
+        cout << word << endl;
+        word[0] = ch;
+    }
+    
+    cout << word << endl;
+    
+    /*
+     ?ate
+     aate
+     bate
+     cate
+     date
+     eate
+     fate
+     gate
+     hate
+     iate
+     jate
+     kate
+     late
+     mate*/
+}
+
+void while_loop_1() {
+    int const ArSize = 20;
+    using namespace std;
+    
+    char name[ArSize];
+    
+    cout << "Ypur first name, please: ";
+    cin >> name;
+    cout << "Here is your name, verticalized and ASCIIized:\n";
+    
+    int i = 0;
+    while (name[i] != '\0') {
+        // int로 type 변환을 하면 ASCII로 변환 가능!
+        cout << name[i] << ": " << int(name[i]) << endl;
+        i++;
+    }
+    
+    /*
+     Ypur first name, please: Test
+     Here is your name, verticalized and ASCIIized:
+     T: 84
+     e: 101
+     s: 115
+     t: 116
+     */
+}
+
+void clock_1() {
+    using namespace std;
+    cout << "Enter the delay time, in seconds: ";
+    float secs;
+    cin >> secs;
+    
+    clock_t delay = secs * CLOCKS_PER_SEC;
+    
+    cout << "starting\a\n";
+    
+    clock_t start = clock();
+    while (clock() - start < delay) {
+        // 루프가 계속 돌음
+    }
+    cout << "done \a\n";
+}
+
+void do_loop_1() {
+    using namespace std;
+    int n;
+    
+    cout << "Enter numbers in the range 1-10 to find ";
+    cout << "my favorite number\n";
+    do {
+        cin >> n;
+    } while (n != 7);
+    
+    cout << "Yes, 7 is my favorite.\n";
+}
+
 void run(void) {
-    pointer_3();
+    do_loop_1();
 }
