@@ -12,6 +12,7 @@
 #include <vector>
 #include <array>
 #include <fstream>
+#include <cmath>
 
 void namespace_1(void) {
     std::cout << "1" << std::endl;
@@ -1453,6 +1454,76 @@ int function_array_paramter_3_demo(const int ar2[][4], const int size) {
     return total;
 }
 
+void cmath_1() {
+    using namespace std;
+    
+    cout << sqrt(4.0) << endl; // 2
+    cout << atan(1.0) * 4 << endl;; // 3.14159
+}
+
+void string_8() {
+    using namespace std;
+    const int SIZE = 5;
+    
+    string list[SIZE];
+    cout << "Enter your " << SIZE << " favorite astronomical sights:\n";
+    
+    for (int i = 0; i < SIZE; i++) {
+        cout << i + 1 << ": ";
+        getline(cin, list[i]); // cin for std::string
+    }
+    
+    cout << "Your list:\n";
+    
+    for (int i = 0; i < SIZE; i++)
+        cout << i + 1 << ": " << list[i] << endl;
+}
+
+void array_8() {
+    const int Seasons = 4;
+    const std::array<std::string, Seasons> Snames {
+        "Spring", "Summer", "Fall", "Winter"
+    };
+    
+    //
+    
+    std::array<double, Seasons> expenses;
+    for (int i = 0; i < Seasons; i++) {
+        std::cout << "Enter " << Snames[i] << " expenses: ";
+        std::cin >> expenses[i];
+    }
+    
+    //
+    
+    double total = 0.0;
+    for (int i = 0; i < Seasons; i++) {
+        std::cout << Snames[i] << ": $" << expenses[i] << std::endl;
+        total += expenses[i];
+    }
+    
+    std::cout << "Total Expenses: $" << total << std::endl;
+}
+
+// void *function_pointer_auto_1_demo_1(); 이랑 다름!!!
+void (*function_pointer_auto_1_demo_1)();
+void function_pointer_auto_1_demo_2();
+void function_pointer_auto_1() {
+    function_pointer_auto_1_demo_1 = &function_pointer_auto_1_demo_2;
+    auto auto_func = &function_pointer_auto_1_demo_2;
+    
+    // ERROR: *auto_func();
+    (*auto_func)();
+}
+void function_pointer_auto_1_demo_2() {
+    std::cout << "Foo" << std::endl;
+}
+
+void typedef_1() {
+    typedef double real;
+    real value = 3.0;
+    std::cout << value << std::endl;
+}
+
 void run(void) {
-    function_array_paramter_3();
+    typedef_1();
 }
