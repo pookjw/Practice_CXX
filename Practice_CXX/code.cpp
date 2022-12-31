@@ -652,8 +652,9 @@ void union_2(void) {
     char const id_char[5] = "Test";
     
     strcpy(prize.id_val.id_char, id_char);
-    // 같음
+    // 같음 (길이 정의)
 //    strncpy(prize.id_val.id_char, id_char, sizeof(prize.id_val.id_char));
+    // 또는 (메모리째로 복사)
 //    memcpy(&(prize.id_val.id_char), &id_char, sizeof(prize.id_val.id_char));
     
     prize.type = widget::charr;
@@ -939,7 +940,8 @@ void compare_string_2() {
     using namespace std;
     string word = "?ate";
     
-    // char와 다르게, cpp string은 operator로 바로 비교 가능
+    // char[]와 다르게, cpp string은 operator로 바로 비교 가능
+    // 하지만 char (문자열 하나)는 ascii 값 비교이므로 단순 operator로 비교 가능
     for (char ch = 'a'; word != "mate"; ch++) {
         cout << word << endl;
         word[0] = ch;
