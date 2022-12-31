@@ -11,6 +11,7 @@
 #include <cstring>
 #include <vector>
 #include <array>
+#include <fstream>
 
 void namespace_1(void) {
     std::cout << "1" << std::endl;
@@ -1150,6 +1151,306 @@ void cin_eof_2() {
     cout << endl << count << " characters read\n";
 }
 
+void two_dimensional_array_1() {
+    int maxtemps[4][5];
+    
+    for (int row = 0; row < 4; row++) {
+        for (int column = 0; column < 5; column++) {
+            maxtemps[row][column] = row + column;
+        }
+    }
+    
+    int columnSize = sizeof(maxtemps[0]) / sizeof(int);
+    int rowSize = sizeof(maxtemps) / (columnSize * sizeof(int));
+    
+    std::cout << rowSize << " " << columnSize << std::endl;
+    
+    for (int row = 0; row < rowSize; row++) {
+        for (int column = 0; column < columnSize; column++) {
+            std::cout << maxtemps[row][column] << std::endl;
+        }
+    }
+}
+
+void two_dimensional_array_2() {
+    using namespace std;
+    
+    const int Cities = 5;
+    const int Years = 4;
+    
+    const char * cities[Cities] {
+        "Gribble City",
+        "Gribbletown",
+        "New Gribble",
+        "San Gribble",
+        "Gribble Vista"
+    };
+    
+    int maxtemps[4][5] {
+        {96, 100, 87, 101, 105},
+        {96, 98, 91, 107, 104},
+        {97, 101, 93, 108, 107},
+        {98, 103, 95, 109, 108}
+    };
+    
+    cout << "Maximum temperatures for 2008 - 2011\n\n";
+    
+    for (int city = 0; city < Cities; ++city) {
+        cout << cities[city] << ":\t";
+        
+        for (int year = 0; year < Years; ++year) {
+            cout << maxtemps[year][city] << "\t";
+        }
+        
+        cout << endl;
+    }
+}
+
+void if_else_1() {
+    char grade = 'C';
+    int total = 0;
+    
+    if (grade == 'A')
+        total++;
+    else if (grade == 'B')
+        total++;
+    else
+        total++;
+}
+
+void cctype_functions_1() {
+    using namespace std;
+    
+    // isalnum checks whether an input value is alphanumeric, that is, a letter or a digit.
+    cout << isalnum(static_cast<int>('$')) << endl; // 0
+    cout << isalnum(static_cast<int>('A')) << endl; // 1
+    cout << isalnum(static_cast<int>('1')) << endl; // 1
+    
+    // isalpha checks whether an input value is alphabetic.
+    cout << isalpha(static_cast<int>('a')) << endl; // 1
+    cout << isalpha(static_cast<int>('1')) << endl; // 0
+    
+    // isblank checks whether an input value is a space or a horizontal tab.
+    cout << isblank(static_cast<int>('\t')) << endl; // 1
+    cout << isblank(static_cast<int>(' ')) << endl; // 1
+    
+    // iscntrl checks whether an input value is a control character.
+    cout << iscntrl(static_cast<int>('\0')) << endl; // 1
+    
+    // isdigit
+    cout << isdigit(static_cast<int>('1')) << endl; // 1
+    
+    // isgraph checks whether an input value is other than s space.
+    cout << isgraph(static_cast<int>(' ')) << endl; // 0
+    cout << isgraph(static_cast<int>('\n')) << endl; // 0
+    cout << isgraph(static_cast<int>('\0')) << endl; // 0
+    cout << isgraph(static_cast<int>('\t')) << endl; // 0
+    cout << isgraph(static_cast<int>('a')) << endl; // 1
+    
+    // isspace = !isgraph
+    cout << isspace(static_cast<int>(' ')) << endl; // 1
+    cout << isspace(static_cast<int>('\n')) << endl; // 1
+    cout << isspace(static_cast<int>('\0')) << endl; // 0 - `\0` represents always false
+    cout << isspace(static_cast<int>('\t')) << endl; // 1
+    cout << isspace(static_cast<int>('a')) << endl; // 0
+    
+    // isprint = isgraph + ' '
+    cout << isprint(static_cast<int>(' ')) << endl; // 1
+    cout << isprint(static_cast<int>('\n')) << endl; // 0
+    cout << isprint(static_cast<int>('\0')) << endl; // 0
+    cout << isprint(static_cast<int>('\t')) << endl; // 0
+    cout << isprint(static_cast<int>('a')) << endl; // 1
+    
+    // islower checks whether an input value is a lowercase letter.
+    cout << islower(static_cast<int>('a')) << endl; // 1
+    cout << islower(static_cast<int>('A')) << endl; // 0
+    cout << islower(static_cast<int>(' ')) << endl; // 0
+    cout << islower(static_cast<int>('3')) << endl; // 0
+    
+    // isupper
+    cout << isupper(static_cast<int>('a')) << endl; // 0
+    cout << isupper(static_cast<int>('A')) << endl; // 1
+    cout << isupper(static_cast<int>(' ')) << endl; // 0
+    cout << isupper(static_cast<int>('3')) << endl; // 0
+    
+    // https://grammarist.com/punctuation-marks/
+    cout << ispunct(static_cast<int>('#')) << endl; // 1
+    cout << ispunct(static_cast<int>('\\')) << endl; // 1
+    cout << ispunct(static_cast<int>('a')) << endl; // 0
+    
+    // isxdigit checks whether an input value is a hexadecimal digit character. (that is, 0-9, a-f, or A-f)
+    cout << isxdigit(static_cast<int>('F')) << endl;; // 1
+    cout << isxdigit(static_cast<int>('-')) << endl; // 0
+    
+    // tolower returns the lowercase version of that character.
+    cout << static_cast<char>(tolower(static_cast<int>('A'))) << endl; // a
+    
+    // toupper
+    cout << static_cast<char>(toupper(static_cast<int>('a'))) << endl; // A
+}
+
+void ofstream_1() {
+    using namespace std;
+    
+    char automobile[50];
+    int year;
+    double a_price;
+    double d_price;
+    
+    ofstream outFile; // create object for output
+    outFile.open("/Users/pookjw/Desktop/charinfo.txt"); // associate with a file
+    
+    cout << "Enter the make and model of automobile: ";
+    cin.getline(automobile, 50);
+    cout << "Enter the model year: ";
+    cin >> year;
+    cout << "Enter the original asking price: ";
+    cin >> a_price;
+    
+    d_price = 0.913 * a_price;
+    
+    // display information on screen with cout
+    cout << fixed;
+    cout.precision(2);
+    cout.setf(ios_base::showpoint);
+    cout << "Make and model: " << automobile << endl;
+    cout << "Year: " << year << endl;
+    cout << "Was asking $" << a_price << endl;
+    cout << "Now asking $" << d_price << endl;
+    
+    outFile << fixed;
+    outFile.precision(2);
+    outFile.setf(ios_base::showpoint);
+    outFile << "Make and model: " << automobile << endl;
+    outFile << "Year: " << year << endl;
+    outFile << "Was asking $" << a_price << endl;
+    outFile << "Now asking $" << d_price << endl;
+    
+    outFile.close();
+}
+
+void ifstream_1() {
+    // input:
+    /*
+     18 19 18.5 13.4 14
+     16 19.5 20 18 12 18.5
+     17.5
+     */
+    
+    // output:
+    /*
+     Enter name of data file: /Users/pookjw/Desktop/input.txt
+     End of file reached.
+     Item read: 11
+     Sum: 186.9
+     Average: 16.9909
+     */
+    
+    using namespace std;
+    
+    const int SIZE = 60;
+    char filename[SIZE];
+    ifstream inFile;
+    
+    cout << "Enter name of data file: ";
+    cin.getline(filename, SIZE);
+    inFile.open(filename);
+    
+    if (!inFile.is_open()) {
+        cout << "Failed to open file" << endl;
+        exit(EXIT_FAILURE); // or EXIT_SUCCESS
+    }
+    
+    double value;
+    double sum = 0.0;
+    int count = 0;
+    
+    inFile >> value; // get first value
+    while (inFile.good()) { // while input good and not at EOF. It returns bool value; if stream reached at EOF returns false.
+        ++count;
+        sum += value;
+        inFile >> value;
+    }
+    
+    if (inFile.eof())
+        cout << "End of file reached.\n";
+    else if (inFile.fail())
+        cout << "Input terminated by data mismatch.\n";
+    else
+        cout << "Input terminated for unknown reason.\n";
+    
+    if (count == 0)
+        cout << "No data processed.\n";
+    else {
+        cout << "Item read: " << count << endl;
+        cout << "Sum: " << sum << endl;
+        cout << "Average: " << sum / count << endl;
+    }
+    
+    inFile.close();
+}
+
+int function_array_parameter_1_demo(int arr[], int n);
+void function_array_parameter_1() {
+    using namespace std;
+    
+    const int ArSize = 8;
+    int cookies[ArSize] = {1, 2, 4, 8, 16, 32, 64, 128};
+    
+    int sum = function_array_parameter_1_demo(cookies, ArSize);
+    cout << "Total cookies eaten: " << sum << endl;
+}
+int function_array_parameter_1_demo(int arr[], int n) {
+    int total = 0;
+    for (int i = 0; i < n; i++)
+        total += arr[i];
+    return total;
+}
+
+// protect value with `const` mark.
+int function_array_parameter_2_demo(const int arr[], int n);
+void function_array_parameter_2() {
+    using namespace std;
+    
+    const int ArSize = 8;
+    int cookies[ArSize] = {1, 2, 4, 8, 16, 32, 64, 128};
+    
+    int sum = function_array_parameter_1_demo(cookies, ArSize);
+    cout << "Total cookies eaten: " << sum << endl;
+}
+int function_array_parameter_2_demo(const int arr[], int n) {
+    int total = 0;
+    for (int i = 0; i < n; i++)
+        total += arr[i];
+    return total;
+}
+
+//int function_array_paramter_3(const int (*ar2)[4], const int size);
+// or
+int function_array_paramter_3_demo(const int ar2[][4], const int size);
+void function_array_paramter_3() {
+    int data[3][4] {
+        {1, 2, 3, 4},
+        {9, 8, 7, 6},
+        {2, 4, 6, 8}
+    };
+    
+    std::cout << function_array_paramter_3_demo(data, 3) << std::endl;
+}
+int function_array_paramter_3_demo(const int ar2[][4], const int size) {
+    int total = 0;
+    
+    for (int a = 0; a < size; a++) {
+        for (int b = 0; b < 4; b++) {
+//            total += ar2[a][b];
+            // is equal to...
+            total += *(*(ar2 + a) + b);
+        }
+    }
+    
+    return total;
+}
+
 void run(void) {
-    cin_eof_2();
+    function_array_paramter_3();
 }
