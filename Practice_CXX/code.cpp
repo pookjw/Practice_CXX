@@ -1020,6 +1020,136 @@ void do_loop_1() {
     cout << "Yes, 7 is my favorite.\n";
 }
 
+void cpp_loop_1() {
+    double prices[5] = {4.99, 10.99, 6.87, 7.99, 8.49};
+    
+    // C++ Style
+    for (const double x : prices)
+        std::cout << x << std::endl;
+    
+    for (double x : prices)
+        x = 0.80; // No Effect
+    
+    // C Style
+    for (int i = 0; i < sizeof(prices) / sizeof(double); i++) {
+        std::cout << prices[i] << std::endl;
+    }
+    
+    // Modify value within loop
+    for (double &x : prices)
+        x = x * 0.80;
+    
+    for (const double x : prices)
+        std::cout << x << std::endl;
+}
+
+void cpp_loop_2() {
+    for (int x : {3, 5, 2, 8, 6})
+        std::cout << x << " ";
+    
+    // Binding reference of type 'int' to value of type 'const int' drops 'const' qualifier
+//    for (int &x : {3, 5, 2, 8, 6})
+//        x = 0.8;
+    
+    std::cout << std::endl;
+}
+
+void unadorned_cin_1() {
+    using namespace std;
+    char ch;
+
+    int count = 0;
+    cout << "Enter characters; enter # to quit:\n";
+//    cin >> ch;
+    cin.get(ch);
+
+    while (ch != '#') {
+        cout << ch;
+        ++count;
+//        cin >> ch;
+        cin.get(ch);
+    }
+
+    cout << endl << count << " characters read\n";
+}
+
+void function_overloading_1() {
+    using namespace std;
+    char name[30];
+    cout << "Enter your name:\n";
+    
+    cin.get(name, 30).get();
+    // is equivalent to...
+    cin.get(name, 30);
+    cin.get();
+}
+
+void cin_fail_1() {
+    using namespace std;
+    
+    char ch;
+    int count = 0;
+    cin.get(ch);
+    
+    // Ctrl + D
+    while (cin.fail() == false) {
+        cout << ch;
+        ++count;
+        cin.get(ch);
+    }
+    
+    cout << endl << count << " characters read\n";
+}
+
+void cin_fail_2() {
+    using namespace std;
+    
+    char ch;
+    int count = 0;
+    
+    // Ctrl + D
+    // returns nullptr when failed.
+    while (cin.get(ch)) {
+        cout << ch;
+        ++count;
+    }
+    
+    cout << endl << count << " characters read\n";
+}
+
+void cin_eof_1() {
+    using namespace std;
+    
+    int count = 0;
+    int ch;
+    ch = cin.get();
+    
+    // EOF = -1
+    // Ctrl + D
+    // returns EOF when failed
+    // get(char_type& __c) returns basic_istream&, but get() returns int_type.
+    while (ch != EOF) {
+        ch = cin.get();
+        cin.get();
+        ++count;
+    }
+    
+    cout << endl << count << " characters read\n";
+}
+
+void cin_eof_2() {
+    using namespace std;
+    int ch;
+    int count = 0;
+    
+    while ((ch = cin.get()) != EOF) {
+        cout.put(char(ch));
+        ++count;
+    }
+    
+    cout << endl << count << " characters read\n";
+}
+
 void run(void) {
-    do_loop_1();
+    cin_eof_2();
 }
