@@ -1524,6 +1524,123 @@ void typedef_1() {
     std::cout << value << std::endl;
 }
 
+inline double inline_1_demo_1(double x) { return x * x; }
+void inline_1() {
+    using namespace std;
+    double a, b;
+    
+    a = inline_1_demo_1(5.0);
+    b = inline_1_demo_1(4.5 + 7.5);
+}
+
+void reference_variable_1() {
+    using namespace std;
+    int rats = 101;
+    int &rodents = rats; // rodents is a reference
+    
+    cout << rodents << endl; // 101
+    rats += 1;
+    cout << rodents << endl; // 102
+    rodents += 1;
+    cout << rats << endl; // 103
+    
+    // or
+    
+    int *pt = &rats;
+    rodents += 1;
+    cout << *pt << endl; // 104
+    
+    int a = 3;
+    rodents = a; // reference does not change.
+    cout << rats << endl; // 3
+}
+
+void reference_variable_2_swap_1(int &a, int &b) {
+    int temp;
+    
+    temp = a;
+    a = b;
+    b = temp;
+}
+void reference_variable_2_swap_2(int *a, int *b) {
+    int temp;
+    
+    temp = *a;
+    *a = *b;
+    *b = temp;
+}
+void reference_variable_2() {
+    int a = 300;
+    int b = 350;
+    
+    // same
+    
+    reference_variable_2_swap_1(a, b);
+    std::cout << a << std::endl;
+    std::cout << b << std::endl;
+    
+    reference_variable_2_swap_2(&a, &b);
+    std::cout << a << std::endl;
+    std::cout << b << std::endl;
+}
+
+double reference_variable_3_demo(const double &ra) {
+    // ERROR
+//    ra = 3;
+    return ra * ra * ra;
+}
+void reference_variable_3() {
+    double a = 3.0;
+    std::cout << reference_variable_3_demo(a) << std::endl; // 27
+}
+
+int & reference_variable_4_demo_1(int &a) {
+    return a;
+}
+int & reference_variable_4_demo_2(int &a) {
+    int *b = &a;
+    return *b;
+}
+const int & reference_variable_4_demo_3(int &a) {
+    return a;
+}
+void reference_variable_4() {
+    int a = 10;
+    int &b = reference_variable_4_demo_1(a);
+    a += 10;
+    std::cout << b << std::endl; // 20
+    
+    a = 10;
+    int &c = reference_variable_4_demo_2(a);
+    a += 10;
+    std::cout << c << std::endl; // 20
+    
+    a = 10;
+    int d = reference_variable_4_demo_1(a);
+    a += 10;
+    std::cout << d << std::endl; // 10
+    
+    a = 10;
+    int e = reference_variable_4_demo_2(a);
+    a += 10;
+    std::cout << e << std::endl; // 10
+    
+    a = 10;
+    const int &f = reference_variable_4_demo_3(a);
+    a += 10;
+    std::cout << f << std::endl; // 20
+    
+    a = 10;
+    const int *g = &reference_variable_4_demo_3(a);
+    a += 10;
+    std::cout << *g << std::endl; // 20
+    
+    a = 10;
+    const int &h = a;
+    a += 10;
+    std::cout << h << std::endl; // 20
+}
+
 void run(void) {
-    typedef_1();
+    reference_variable_4();
 }
