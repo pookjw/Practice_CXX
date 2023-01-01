@@ -13,6 +13,7 @@
 #include <array>
 #include <fstream>
 #include <cmath>
+#include <cstdlib>
 
 void namespace_1(void) {
     std::cout << "1" << std::endl;
@@ -1636,11 +1637,291 @@ void reference_variable_4() {
     std::cout << *g << std::endl; // 20
     
     a = 10;
-    const int &h = a;
+    int *h = const_cast<int *>(&reference_variable_4_demo_3(a));
     a += 10;
-    std::cout << h << std::endl; // 20
+    std::cout << *h << std::endl; // 20
+    
+    a = 10;
+    const int &i = a;
+    a += 10;
+    std::cout << i << std::endl; // 20
+}
+
+const std::string & reference_variable_5_demo_1(const std::string &s1) {
+    return s1;
+}
+std::string reference_variable_5_demo_2(std::string s1) {
+    return s1;
+}
+void reference_variable_5() {
+    using namespace std;
+    
+    string a;
+    
+    a = "1";
+    const string b = reference_variable_5_demo_1(a);
+    a = "2";
+    cout << b << endl; // 1
+    
+    a = "1";
+    string c = reference_variable_5_demo_2(a);
+    a = "2";
+    cout << c << endl; // 1
+    
+    a = "1";
+    const string d = reference_variable_5_demo_1(a);
+    a.erase(0);
+    a.insert(0, "2");
+    cout << a << endl; // 2
+    cout << d << endl; // 1
+    
+    a = "1";
+    const string &e = reference_variable_5_demo_1(a);
+    a = "2";
+    cout << e << endl; // 2
+}
+
+void reference_variable_6_demo_1(std::ostream &os, double fo, const double fe[], int n) {
+    std::ios_base::fmtflags initial = os.setf(std::ios_base::fixed); // save initial formatting size
+    
+    os.precision(0);
+    os << "Focal length of objective: " << fo << " mm\n";
+    os.setf(std::ios::showpoint);
+    os.width(12); // 띄어쓰기 여백
+    os << "f.l. eyepiece";
+    os.width(15); // 띄어쓰기 여백
+    os << "magnification" << std::endl;
+    
+    for (int i = 0; i < n; i++) {
+        os.width(12); // 띄어쓰기 여백
+        os << fe[i];
+        os.width(15); // 띄어쓰기 여백
+        os << int (fo/fe[i] + 0.5) << std::endl;
+    }
+    
+    os.setf(initial); // restore
+}
+void reference_variable_6() {
+    const int LIMIT = 5;
+    
+    std::ofstream fout;
+    fout.open("/Users/pookjw/Desktop/ep-data.txt");
+    
+    if (!fout.is_open())
+        exit(EXIT_FAILURE);
+    
+    double objective;
+    std::cout << "Enter the focal length of your telescope objective in mm: ";
+    std::cin >> objective;
+    
+    double eps[LIMIT];
+    std::cout << "Enter the focal lengths, in mm, of " << LIMIT << " eyepieces: ";
+    
+    for (int i = 0; i < LIMIT; i++) {
+        std::cout << "Eyepiece #" << i + 1 << ": ";
+        std::cin >> eps[i];
+    }
+    
+    reference_variable_6_demo_1(fout, objective, eps, LIMIT);
+    reference_variable_6_demo_1(fout, objective, eps, LIMIT);
+    
+    std::cout << "Done\n";
+    
+    /*
+     Focal length of objective: 3 mm
+     f.l. eyepiece  magnification
+               1.              3
+               2.              2
+               3.              1
+               4.              1
+               5.              1
+     Focal length of objective: 3. mm
+     f.l. eyepiece  magnification
+               1.              3
+               2.              2
+               3.              1
+               4.              1
+               5.              1
+
+     */
+}
+
+void function_default_value_1_demo_1(int n, int m = 1);
+// ERROR: Missing default argument on parameter 'm'
+//void function_default_value_1_demo_2(int n = 3, int m);
+void function_default_value_1() {
+    function_default_value_1_demo_1(3);
+}
+void function_default_value_1_demo_1(int n, int m) {
+    std::cout << n << m << std::endl;
+}
+
+void function_overloading_2_demo_1(int i);
+void function_overloading_2_demo_1(double d);
+// ERROR: Redefinition of 'function_overloading_2_demo_1'
+//void function_overloading_2_demo_1(const int i);
+//void function_overloading_2_demo_1(double &d);
+void function_overloading_2_demo_2(double &rs);
+void function_overloading_2_demo_2(double *rs);
+void function_overloading_2_demo_2(const double &rs);
+void function_overloading_2() {
+    function_overloading_2_demo_1(3); // int
+    function_overloading_2_demo_1(3.0); // double
+    
+    double d;
+    function_overloading_2_demo_2(d); // double &
+    function_overloading_2_demo_2(&d); // double *
+    function_overloading_2_demo_2(const_cast<const double &>(d)); // const double &
+}
+void function_overloading_2_demo_1(int i) {
+    i = 3;
+    std::cout << "int" << std::endl;
+}
+void function_overloading_2_demo_1(double d) {
+    std::cout << "double" << std::endl;
+}
+//void function_overloading_2_demo_1(const int i) {
+//    std::cout << "const int" << std::endl;
+//}
+//void function_overloading_2_demo_1(double &d) {
+//    d = 1.0;
+//    std::cout << "double &" << std::endl;
+//}
+void function_overloading_2_demo_2(double &rs) {
+    std::cout << "double &" << std::endl;
+}
+void function_overloading_2_demo_2(double *rs) {
+    std::cout << "double *" << std::endl;
+}
+void function_overloading_2_demo_2(const double &rs) {
+    std::cout << "const double &" << std::endl;
+}
+
+template <typename TEMPLATE_1_DEMO_TEMPLATE>
+void template_1_demo_1(TEMPLATE_1_DEMO_TEMPLATE &a, TEMPLATE_1_DEMO_TEMPLATE &b) {
+    TEMPLATE_1_DEMO_TEMPLATE temp = a;
+    a = b;
+    b = temp;
+}
+void template_1() {
+    int a = 3;
+    int b = 4;
+    template_1_demo_1(a, b);
+    std::cout << a << b << std::endl; // 43
+    
+    std::string c = "A";
+    std::string d = "B";
+    template_1_demo_1(c, d);
+    std::cout << c << d << std::endl; // BA
+}
+
+template <typename TEMPLATE_2_TEMP_TEMPLATE> // original template
+void template_2_demo_1(TEMPLATE_2_TEMP_TEMPLATE &a, TEMPLATE_2_TEMP_TEMPLATE &b) {
+    TEMPLATE_2_TEMP_TEMPLATE temp = a;
+    a = b;
+    b = temp;
+}
+template <typename TEMPLATE_2_TEMP_TEMPLATE> // new template
+// & -> *
+void template_2_demo_1(TEMPLATE_2_TEMP_TEMPLATE *a, TEMPLATE_2_TEMP_TEMPLATE *b) {
+    TEMPLATE_2_TEMP_TEMPLATE temp = *a;
+    *a = *b;
+    *b = temp;
+}
+void template_2() {
+    int a = 3;
+    int b = 2;
+    template_2_demo_1(a, b);
+    std::cout << a << b << std::endl;
+    
+    template_2_demo_1(&a, &b);
+    std::cout << a << b << std::endl;
+}
+
+template <typename T>
+void template_3(T);
+// ERROR: Unknown type name 'T'
+//void template_3(T a) { }
+
+template <typename T>
+void template_4(T);
+template <typename T>
+void template_4(T a) {
+    std::cout << a << std::endl;
+}
+
+template <typename T>
+void template_5_demo_1(T);
+// explicit
+template <> void template_5_demo_1<int>(int a) {
+    std::cout << "int" << std::endl;
+}
+template <> void template_5_demo_1<double>(double a) {
+    std::cout << "double" << std::endl;
+}
+void template_5() {
+    template_5_demo_1(3); // int
+    template_5_demo_1(3.0); // double
+}
+
+template <class T>
+T template_6_demo_1(T a, T b) {
+    return a + b;
+}
+void template_6() {
+    std::cout << template_6_demo_1((std::string)"A", static_cast<std::string>("B")) << std::endl; // AB
+}
+
+template <class T1, class T2>
+T1 template_7_demo_1(T1 a, T2 b) {
+    return a + b;
+}
+int template_7_demo_1(int a, int b) {
+    return a + b;
+}
+void template_7() {
+    using namespace std;
+    
+    cout << template_7_demo_1(static_cast<string>("A"), static_cast<string>("B")) << endl; // AB
+    cout << template_7_demo_1(1, 2) << endl; // 3
+    
+    // explicit
+    cout << template_7_demo_1<string, string>(static_cast<string>("A"), static_cast<string>("B")) << endl; // AB
+    cout << template_7_demo_1<int>(1, 2) << endl; // 3
+}
+
+void decltype_1() {
+    using namespace std;
+    
+    // https://stackoverflow.com/questions/14130774/difference-between-decltype-and-typeof
+    // C++11
+    // typeof와 비슷하지만 더 확장성이 있음
+    
+    int a = 3;
+    int &b = a;
+    
+    typeof(b) c = b; // int
+    decltype(b) d = b; // int &
+    
+    a = 4;
+    
+    cout << c << endl; // 3
+    cout << d << endl; // 4
+}
+
+template <class T1, class T2>
+// ERROR
+//decltype(x + y) decltype_2_demo_1(T1 x, T2 y) {
+auto decltype_2_demo_1(T1 x, T2 y) -> decltype(x + y) {
+    // C++11
+    // 만약에 decltype을 return type으로 하고 싶으면, auto랑 -> 기호를 쓰면 됨
+    return x + y;
+}
+void decltype_2() {
+    // AB
+    std::cout << decltype_2_demo_1((std::string)"A", (std::string)"B") << std::endl;
 }
 
 void run(void) {
-    reference_variable_4();
+    decltype_2();
 }
