@@ -14,6 +14,7 @@
 #include <fstream>
 #include <cmath>
 #include <cstdlib>
+#include "static_value.hpp"
 
 void namespace_1(void) {
     std::cout << "1" << std::endl;
@@ -1922,6 +1923,72 @@ void decltype_2() {
     std::cout << decltype_2_demo_1((std::string)"A", (std::string)"B") << std::endl;
 }
 
+void auto_stroage_type_1() {
+    // 안 써도 자동으로 되지만, stack에 값을 저장해서 메모리를 관리하도록 명시
+    // 'auto' storage class specifier is not permitted in C++11, and will not be supported in future releases
+    auto int a = 1;
+    
+    // ERROR: Cannot combine with previous 'auto' declaration specifier
+//    auto auto b = 1;
+}
+
+void register_type_1() {
+    // CPU Register에 저장하는 것이기 때문에 메모리 주소가 존재하지 않음
+    // 접근이 더 빨랐다고 함 근데 요즘은 컴파일러가 자동으로 해줌
+    // ERROR: ISO C++17 does not allow 'register' storage class specifier
+//    register int a = 1;
+}
+
+void extern_value_1() {
+    // extern_value.cpp에 있고 hpp에 정의 안해도 값을 가져 올 수 있음
+    extern int extern_value;
+    std::cout << extern_value << std::endl;
+}
+
+void extern_value_2() {
+    // extern_value.cpp
+    extern const int extern_const_value;
+    // ERROR
+//    extern_const_value = 3;
+}
+
+void static_value_1() {
+    // static_value.hpp
+    std::cout << static_value << std::endl; // 3
+    static int static_value = 4; // overrides external
+    std::cout << static_value << std::endl; // 4
+}
+
+void mutable_value_1() {
+    struct data {
+        char name[30];
+        mutable int accesses;
+    };
+    
+    const data veep = {"Claybourne Clodde", 0};
+    veep.accesses = 3; // const이어도 mutable이기 때문에 값을 변경할 수 있음
+}
+
+void language_linking_1_demo_1() {
+    std::cout << "C++" << std::endl;
+}
+extern "C" {
+void language_linking_1_demo_2() {
+    std::cout << "C" << std::endl;
+}
+}
+extern "C++" {
+void language_linking_1_demo_3() {
+    std::cout << "C++" << std::endl;
+}
+}
+extern "C" void language_linking_1_demo_4() {
+    std::cout << "C" << std::endl;
+}
+void language_linking_1() {
+    language_linking_1_demo_4();
+}
+
 void run(void) {
-    decltype_2();
+    language_linking_1();
 }
