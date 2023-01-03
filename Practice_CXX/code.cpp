@@ -1997,6 +1997,27 @@ void new_operator_1() {
     delete pd;
 }
 
+void delete_operator_1() {
+    int *pi = new int;
+    
+    delete pi;
+    // or
+//    delete(pi);
+}
+
+char new_operator_2_buffer_1[500];
+void new_operator_2() {
+    int *p1 = new int[20]; // place int array in heap
+    delete [] p1;
+    
+    // buffer 영역에 메모리 alloc
+    int *p2 = new (new_operator_2_buffer_1) int[20];
+    
+    // Runtime Error: Thread 1: signal SIGABRT
+    // delete는 heap에 있는 메모리만 지워줌
+//    delete [] p2;
+}
+
 void run(void) {
-    language_linking_1();
+    new_operator_2();
 }
