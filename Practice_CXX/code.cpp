@@ -1989,6 +1989,14 @@ void language_linking_1() {
     language_linking_1_demo_4();
 }
 
+void new_operator_1() {
+    int *pi = new int(6); // *pi set to 6
+    double *pd = new double (99.99);
+    
+    delete pi;
+    delete pd;
+}
+
 void run(void) {
     language_linking_1();
 }
