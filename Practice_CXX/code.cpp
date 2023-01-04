@@ -15,6 +15,8 @@
 #include <cmath>
 #include <cstdlib>
 #include "static_value.hpp"
+#include "class_1.hpp"
+#include "class_2.hpp"
 
 void namespace_1(void) {
     std::cout << "1" << std::endl;
@@ -2018,6 +2020,104 @@ void new_operator_2() {
 //    delete [] p2;
 }
 
+namespace namespace_4_demo_1 {
+int a;
+void foo() {
+    
+}
+};
+void namespace_4() {
+    int a1 = namespace_4_demo_1::a;
+    using namespace namespace_4_demo_1;
+    int b1 = a;
+}
+
+namespace namespace_5_demo_1 {
+int a;
+};
+void namespace_5() {
+    using namespace_5_demo_1::a;
+    int a1 = a;
+    
+    using std::cout;
+    using std::endl;
+    
+    cout << a << endl;
+}
+
+namespace namespace_6_demo_1 {
+struct Person {
+    std::string fname;
+    std::string lname;
+};
+std::string concat_names(Person person) {
+    return person.fname + person.lname;
+}
+};
+void namespace_6() {
+    namespace_6_demo_1::Person person = {"A", "B"};
+    std::cout << namespace_6_demo_1::concat_names(person) << std::endl;
+}
+
+namespace {
+int unnamed_namespace_1_int; // static storage, internal linkage
+};
+void unnamed_namespace_1() {
+    unnamed_namespace_1_int = 3;
+}
+
+void class_1() {
+    Class_1_Demo demo;
+    demo.refresh_id();
+    demo.refresh_name();
+    
+    Class_1_Demo *p = &demo;
+    p->refresh_name();
+    
+    std::cout << p->concat_id_and_name() << std::endl;
+}
+
+void class_2() {
+    Class_2_Demo demo_1 = Class_2_Demo("Test", "Test");
+    Class_2_Demo demo_2;
+    Class_2_Demo demo_3 = Class_2_Demo("Test");
+}
+
+void class_3() {
+    const Class_2_Demo demo = Class_2_Demo("Test");
+    
+    // const에서는 값을 바꾸거나 method 실행이 안 됨
+//    demo.show();
+//    demo.name = "2";
+    
+    // mutable은 됨
+    demo.group = "G";
+    
+    // const로 정의된 method는 됨
+    demo.non_mutating_method();
+}
+
+void class_4() {
+    Class_2_Demo *demo = new Class_2_Demo("Test");
+    delete demo;
+    
+    // 기본 constructor가 3번 불리고
+    Class_2_Demo *demos_1 = new Class_2_Demo[3];
+    // Destructor가 3번 불림
+    delete[] demos_1;
+    
+    Class_2_Demo demo_2("Test");
+    
+    // C++11
+    Class_2_Demo demo_3 = {"Test", "Test"};
+    Class_2_Demo demo_4{"Test", "Test"};
+    Class_2_Demo *demo_5 = new Class_2_Demo{"Test", "Test"};
+    delete [] demo_5;
+    
+    Class_2_Demo *demo_6 = new Class_2_Demo[3] {{"Test", "Test"}};
+    delete [] demo_6;
+}
+
 void run(void) {
-    new_operator_2();
+    class_4();
 }
