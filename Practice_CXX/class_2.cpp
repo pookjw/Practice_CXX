@@ -25,6 +25,38 @@ Class_2_Demo::Class_2_Demo(const std::string id, const std::string name) {
     this->name = name;
 }
 
+Class_2_Demo::Class_2_Demo(const double m) {
+    
+}
+
 Class_2_Demo::~Class_2_Demo() {
     std::cout << "Destructor!" << std::endl;
+}
+
+Class_2_Demo Class_2_Demo::operator+(const Class_2_Demo &other) const {
+    return Class_2_Demo();
+}
+
+Class_2_Demo operator+(double m, const Class_2_Demo &other) {
+    return Class_2_Demo();
+}
+
+int operator+(const Class_2_Demo &other, double m) {
+    return 3;
+}
+
+void Class_2_Demo::operator<<(std::ostream &os) {
+    os << "<< operator\n";
+}
+
+Class_2_Demo::operator int() const {
+    return 3;
+}
+
+Class_2_Demo::operator double() const {
+    return 3.0;
+}
+
+Class_2_Demo::operator std::string() const {
+    return "Operator!!!";
 }

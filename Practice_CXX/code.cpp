@@ -2081,6 +2081,19 @@ void class_2() {
     Class_2_Demo demo_1 = Class_2_Demo("Test", "Test");
     Class_2_Demo demo_2;
     Class_2_Demo demo_3 = Class_2_Demo("Test");
+    
+    // double만 있는 constructor가 불림
+    Class_2_Demo demo_4 = 3.0;
+    Class_2_Demo demo_5 = static_cast<Class_2_Demo>(5.0);
+    Class_2_Demo demo_6 = (Class_2_Demo)4.0;
+    
+    demo_4.name = "Demo 4";
+    demo_5.name = "Demo 5";
+    demo_6.name = "Demo 6";
+    
+    std::cout << demo_4.name << std::endl;
+    std::cout << demo_5.name << std::endl;
+    std::cout << demo_6.name << std::endl;
 }
 
 void class_3() {
@@ -2112,12 +2125,76 @@ void class_4() {
     Class_2_Demo demo_3 = {"Test", "Test"};
     Class_2_Demo demo_4{"Test", "Test"};
     Class_2_Demo *demo_5 = new Class_2_Demo{"Test", "Test"};
-    delete [] demo_5;
+    delete demo_5;
     
     Class_2_Demo *demo_6 = new Class_2_Demo[3] {{"Test", "Test"}};
     delete [] demo_6;
 }
 
+void class_5() {
+    // 기본 constructor가 4번 불리고
+    Class_2_Demo arr[4];
+    // stack이 소멸되면서 Destructor가 3번 불림
+    
+    arr[0].show();
+    arr[3].show();
+    
+    Class_2_Demo arr2[4] {
+        {"Test"},
+        {"Test", "Test"},
+        {"Test", "Test"}
+    };
+}
+
+void class_operator_1() {
+    Class_2_Demo first;
+    Class_2_Demo second;
+    
+    Class_2_Demo result1 = first + second;
+    Class_2_Demo result4 = second.operator+(first);
+    
+    Class_2_Demo result2 = 3.0 + first;
+    Class_2_Demo result6 = operator+(2.0, first);
+    int result3 = second + 4.0;
+    int result5 = operator+(first, 4.0);
+    
+    first << std::cout;
+}
+
+void class_type_casting_1() {
+    // Constructor가 불림
+    Class_2_Demo demo_1 = 3.0;
+    Class_2_Demo demo_2 = static_cast<Class_2_Demo>(5.0);
+    Class_2_Demo demo_3 = (Class_2_Demo)4.0;
+    
+    // operator가 불림
+    int demo_4 = demo_1;
+    double demo_5 = (double)demo_2;
+    
+    std::cout << demo_4 << std::endl; // 3
+    std::cout << demo_5 << std::endl; // 3
+    
+    // explicit - demo_4 같은 암시적 변환을 막음
+    // ERROR
+//    std::string demo_6 = demo_1;
+    std::string demo_6 = (std::string)demo_1;
+    std::string demo_7 = static_cast<std::string>(demo_1);
+    
+    std::cout << demo_6 << demo_7 << std::endl;
+}
+
+// 원래는 enum에서 이름이 겹치면 안 되지만, class를 쓰면 namespace 처럼 충돌을 피할 수 있음
+enum class scoped_enumerations_1_demo_1 { Small, Medium, Large, Jumbo };
+enum class scoped_enumerations_1_demo_2 { Small, Medium, Large, Jumbo };
+void scoped_enumerations_1() {
+    scoped_enumerations_1_demo_1 size = scoped_enumerations_1_demo_1::Small;
+    
+    // Not allowed
+//    std::cout << size << std::endl;
+    // Allowed
+    std::cout << static_cast<int>(size) << std::endl; // 0
+}
+
 void run(void) {
-    class_4();
+    class_type_casting_1();
 }
