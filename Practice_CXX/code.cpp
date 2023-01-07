@@ -17,6 +17,8 @@
 #include "static_value.hpp"
 #include "class_1.hpp"
 #include "class_2.hpp"
+#include "stringbad.hpp"
+#include "stringbad_2.hpp"
 
 void namespace_1(void) {
     std::cout << "1" << std::endl;
@@ -25,6 +27,10 @@ void namespace_1(void) {
 void namespace_2(void) {
     using namespace std;
     cout << "2" << endl;
+    
+    using namespace std; {
+        cout << "3" << endl;
+    }
 }
 
 void namespace_3(void) {
@@ -2195,6 +2201,49 @@ void scoped_enumerations_1() {
     std::cout << static_cast<int>(size) << std::endl; // 0
 }
 
+// 별 문제 없이 StringBad::num_strings이 잘 카운팅 됨
+void stringbad_1() {
+    using namespace std; {
+        StringBad headline1("Celery Stalks at Midnight");
+        StringBad headline2("Lettuce Prey");
+        StringBad sports("Spinach Leaves Bowl for Dollars");
+    }
+}
+
+void stringbad_2_demo_1(StringBad &rsb) {
+}
+void stringbad_2_demo_2(StringBad sb){
+}
+void stringbad__2() {
+    using namespace std; {
+        StringBad headline1("Celery Stalks at Midnight");
+        
+        // 문제가 없음 - reference type
+        stringbad_2_demo_1(headline1);
+        
+        // Runtime 에러
+        // stringbad_1_demo_2()가 불리면서 StringBad이 복사가 되는데, str의 포인터가 그대로 복사되므로, destrcutor가 original, copy에서 불리면서 str에 delete가 두번 불리는 현상이 발생
+        stringbad_2_demo_2(headline1);
+        
+        // Runtime 에러 : 객체 복사가 되면서 위랑 같은 문제
+        StringBad headline2 = headline1;
+    }
+}
+
+void stringbad_3_demo_1(StringBad_2 &rsb) {
+}
+void stringbad_3_demo_2(StringBad_2 sb){
+}
+void stringbad_3() {
+    StringBad_2 headline1("Celery Stalks at Midnight");
+    
+    // copy constructor가 불리면서 복사 - str에 새로운 pointer가 할당되므로 문제가 사라짐
+    stringbad_3_demo_2(headline1);
+    
+    // = operator
+    StringBad_2 headline2 = headline1;
+}
+
 void run(void) {
-    class_type_casting_1();
+    stringbad_3();
 }
