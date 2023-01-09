@@ -19,6 +19,7 @@
 #include "class_2.hpp"
 #include "stringbad.hpp"
 #include "stringbad_2.hpp"
+#include "const_operator_1.hpp"
 
 void namespace_1(void) {
     std::cout << "1" << std::endl;
@@ -2212,7 +2213,13 @@ void stringbad_1() {
 
 void stringbad_2_demo_1(StringBad &rsb) {
 }
-void stringbad_2_demo_2(StringBad sb){
+StringBad & stringbad_2_demo_2(StringBad &rsb) {
+    return rsb;
+}
+void stringbad_2_demo_3(StringBad sb){
+}
+StringBad stringbad_2_demo_4(StringBad &rsb) {
+    return rsb;
 }
 void stringbad__2() {
     using namespace std; {
@@ -2220,13 +2227,15 @@ void stringbad__2() {
         
         // 문제가 없음 - reference type
         stringbad_2_demo_1(headline1);
+        StringBad headline2 = stringbad_2_demo_2(headline1);
         
         // Runtime 에러
         // stringbad_1_demo_2()가 불리면서 StringBad이 복사가 되는데, str의 포인터가 그대로 복사되므로, destrcutor가 original, copy에서 불리면서 str에 delete가 두번 불리는 현상이 발생
-        stringbad_2_demo_2(headline1);
+//        stringbad_2_demo_3(headline1);
         
         // Runtime 에러 : 객체 복사가 되면서 위랑 같은 문제
-        StringBad headline2 = headline1;
+//        StringBad headline3 = headline1;
+        StringBad headline4 = stringbad_2_demo_4(headline1);
     }
 }
 
@@ -2244,6 +2253,29 @@ void stringbad_3() {
     StringBad_2 headline2 = headline1;
 }
 
+void const_oerator_1() {
+    Const_Operator_1 first { "First" };
+    Const_Operator_1 second { "Second" };
+    
+    Const_Operator_1 third;
+    third = (first + second);
+    std::cout << third << std::endl; // FirstSecond
+    
+    Const_Operator_1 fourth;
+    // 원리
+    /*
+     operator+에 의해 Const_Operator_1 &가 반환됨
+     반환된 값에 fourth 할당
+     결론 : fourth에는 아무 변화가 없음
+     */
+    (first + second) = fourth;
+    std::cout << third << std::endl; // 아무것도 안 나옴
+    
+    /*
+     만약에 operator+의 반환 타입에 const를 붙였을 경우, (first + second)는 const를 반환하기 때문에 = fourth에서 에러가 남
+     */
+}
+
 void run(void) {
-    stringbad_3();
+    const_oerator_1();
 }
