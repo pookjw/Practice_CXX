@@ -20,6 +20,7 @@
 #include "stringbad.hpp"
 #include "stringbad_2.hpp"
 #include "const_operator_1.hpp"
+#include "string_demo.hpp"
 
 void namespace_1(void) {
     std::cout << "1" << std::endl;
@@ -2276,6 +2277,33 @@ void const_oerator_1() {
      */
 }
 
+void string_mock_demo_1() {
+    String_Demo str1 = "1";
+    String_Demo str2 = "245";
+    std::cout << (str1 < str2) << std::endl;
+    std::cout << (str1 == str2) << std::endl;
+    std::cout << (String_Demo("1") > str2) << std::endl;
+    
+    // char & operator[] (int i);
+    std::cout << str2[1] << std::endl;
+    
+    const String_Demo str3 {"12345"};
+    // const char & operator[](int i) const;
+    std::cout << str3[2] << std::endl;
+    
+    std::cout << str3.length() << std::endl;
+    
+    std::cout << String_Demo::HowMany() << std::endl;
+    
+    // <<, >> operators
+    std::cout << str3 << std::endl;
+    
+    String_Demo str4;
+    std::cin >> str4;
+    std::cout << str4 << std::endl;
+}
+
 void run(void) {
     const_oerator_1();
+    string_mock_demo_1();
 }
