@@ -1081,7 +1081,109 @@ void inline_1() {
     b = inline_1_foo(8.0);
 }
 
+void reference_variable_1() {
+    using namespace std;
+    int rats = 101;
+    int &rodents = rats;
+    
+    cout << rodents << endl; // 101
+    rodents += 1;
+    cout << rats << endl; // 102
+}
+
+void reference_variable_2_swap_1(int &a, int &b) {
+    int temp;
+    
+    temp = a;
+    a = b;
+    b = temp;
+}
+void reference_variable_2_swap_2(int *a, int *b) {
+    int temp;
+    
+    temp = *a;
+    *a = *b;
+    *b = temp;
+}
+void reference_variable_2() {
+    int a = 300;
+    int b = 500;
+    
+    reference_variable_2_swap_1(a, b);
+    std::cout << a << " " << b << std::endl;
+    
+    reference_variable_2_swap_2(&a, &b);
+    std::cout << a << " " << b << std::endl;;
+}
+
+double reference_variable_3_foo(const double &a = 4) {
+//    a = 4; // Cannot assign to variable 'a' with const-qualified type 'const double &'
+    return a * a * a;
+}
+void reference_variable_3() {
+    std::cout << reference_variable_3_foo(3.0) << std::endl;
+    std::cout << reference_variable_3_foo() << std::endl;
+}
+
+template <typename TEMPLATE_1>
+void template_1_foo(TEMPLATE_1 &a, TEMPLATE_1 &b) {
+    TEMPLATE_1 temp = a;
+    a = b;
+    b = temp;
+}
+void template_1() {
+    int a = 3;
+    int b = 4;
+    template_1_foo(a, b);
+    std::cout << a << " " << b << std::endl;
+    
+    std::string c = "c";
+    std::string d = "d";
+    template_1_foo(c, d);
+    std::cout << c << " " << d << std::endl;
+}
+
+template <typename T>
+void template_3(T);
+template <typename T> // prototype에서는 한 번 더 명시해야함
+void template_3(T a) { }
+
+template <typename T>
+T template_4_foo(T a) { // explicit
+    std::cout << "T" << std::endl;
+    return a;
+}
+template <> int template_4_foo<int>(int a) { // explicit
+    std::cout << "int" << std::endl;
+    return a;
+}
+void template_4() {
+    template_4_foo("C");
+    template_4_foo(3);
+}
+
+void decltype_1() {
+    int a = 3;
+    int &b = a;
+    
+    typeof(b) c = b; // int
+    decltype(b) d = b; // int &
+    
+    a = 4;
+    
+    std::cout << c << " " << d << std::endl;
+}
+
+template <class T1, class T2>
+auto decltype_2_foo(T1 x, T2 y) -> decltype(x + y) {
+    // 자동으로 return type을 지정하려면 auto랑 decltype 기호를 같이 쓰면 된다.
+    return x + y;
+}
+
+// unnamed namespace https://jogamja.tistory.com/121
+
+
 int main(int argc, const char * argv[]) {
-    inline_1();
+    decltype_1();
     return EXIT_SUCCESS;
 }
