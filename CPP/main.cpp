@@ -6,6 +6,9 @@
 //
 
 #include <iostream>
+#include <memory>
+#include <algorithm>
+#include <fstream>
 
 void practice_std(void) {
     std::cout << "1" << std::endl;
@@ -744,32 +747,341 @@ void pointer_3(void) {
     std::cout << value.name << std::endl; // Test
 }
 
-void vector_1() {
-    // heap
-    std::vector<int> vi;
-    std::vector<double> vd(10);
-}
-
 void array_7() {
     // array uses the stack, and requires fixed size.
     std::array<int, 5> ai;
     std::array<double, 4> ad = {1.2, 2.1, 3.43, 4.3};
 }
 
-void vector_vs_array_1() {
+void vector_1() {
     using namespace std;
     
-    double a1[4] = {1.2, 2.4, 3.6, 4.8};
+    // heap
+    vector<int> a2;
+    a2.push_back(3);
+    a2.push_back(4);
+    a2.push_back(5);
+    a2.push_back(6);
+    a2.push_back(7);
+    a2.push_back(8);
+    a2.push_back(9);
     
-    vector<double> a2;
-//    vector<double> a2(4); // fixing size
-    a2[0] = 3.;
-    a2[1] = 1.0 / 5.0;
-    a2[2] = 0.5;
-    a2[3] = 0.1;
+    for (int i : a2) {
+        cout << i << endl;
+    }
+    
+    for (std::vector<int>::iterator it = a2.begin(); it != a2.end(); it++) {
+        cout << *it << endl;
+    }
+    
+    for (std::vector<int>::reverse_iterator it = a2.rbegin(); it != a2.rend(); it++) {
+        cout << *it << endl;
+    }
+    
+    cout << "---" << endl;
+    
+    a2.clear();
+    cout << a2.size() << endl; // 0
+    cout << a2.capacity() << endl; // 8
+    
+    a2.shrink_to_fit();
+    cout << a2.capacity() << endl; // 0
+    
+    a2.resize(__SIZEOF_INT__);
+    cout << a2.capacity() << endl; // 4
+    cout << a2.empty() << endl; // 0
+    a2.clear();
+    cout << a2.empty() << endl; // 1
+    
+    a2.push_back(3);
+    cout << a2.at(0) << endl; // 3
+    a2.push_back(5);
+    cout << a2.at(1) << endl; // 5
+    
+    cout << a2.size() << endl; // 2
+    a2.pop_back();
+    cout << a2.size() << endl; // 1
+    
+    a2.clear();
+    for (int i = 0; i < 10; i++) {
+        a2.push_back(i);
+    }
+    a2.erase(a2.begin() + 5);
+    cout << a2.size() << endl; // 9
+    
+    //    a2[0] = 3.;
+    //    a2[1] = 1.0 / 5.0;
+    //    a2[2] = 0.5;
+    //    a2[3] = 0.1;
+    //    a2[4] = 0.3;
+    //    
+    //    for (double a : a2) {
+    //        cout << a << endl;
+    //    }
+    //    cout << a2[4] << endl;
+    //    cout << a2.capacity() << endl;
+    //    cout << a2.size() << endl;
+    //    a2.clear();
+    //}
+}
+
+void vector_erase_1() {
+    std::vector<int> numbers = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    
+    for (std::vector<int>::iterator iterator = numbers.begin(); iterator != numbers.end(); iterator++) {
+        std::cout << &(*iterator) << std::endl;
+    }
+    
+    numbers.erase(numbers.begin() + 3);
+    
+    std::cout << "-----" << std::endl;
+    
+    for (std::vector<int>::iterator iterator = numbers.begin(); iterator != numbers.end(); iterator++) {
+        std::cout << &(*iterator) << std::endl;
+    }
+}
+
+void vector_remove_1() {
+    // remove는 capacity를 바꾸지 않고 해당 position에 empty data를 삽입하는데
+    // erase는 capacity를 줄이고 뒤에 있는 모든 메모리 주소들 값을 바꿈
+    // 성능이나 메모리 효율 둘중 하나를 택하면 되는 문제
+    std::vector<int> numbers(10);
+    
+    for (int i = 0; i < 10; i++) {
+        numbers.at(i) = i;
+    }
+    
+    for (std::vector<int>::iterator iterator = numbers.begin(); iterator != numbers.end(); iterator++) {
+        std::cout << &(*iterator) << std::endl;
+    }
+    
+    // requires `#include <algorithm>`
+    remove(numbers.begin(), numbers.end(), 4);
+    
+    std::cout << "-----" << std::endl;
+    
+    for (std::vector<int>::iterator iterator = numbers.begin(); iterator != numbers.end(); iterator++) {
+        std::cout << &(*iterator) << std::endl;
+    }
+    
+    for (std::vector<int>::iterator iterator = numbers.begin(); iterator != numbers.end(); iterator++) {
+        std::cout << *iterator << std::endl;
+    }
+}
+
+void unique_ptr_1_foo(std::unique_ptr<int> number) {
+    
+}
+void unique_ptr_1() {
+    // allocate memory to heap
+    // stack이 소멸되면 메모리가 자동으로 해제되며 다른 stack과 공유 불가능
+    std::unique_ptr<int> number(new int);
+    *number = 3;
+    
+    // Call to implicitly-deleted copy constructor of 'std::unique_ptr<int>'
+//    unique_ptr_1_foo(number);
+    
+    // automatically deleted!
+}
+
+void shared_ptr_1_foo(std::shared_ptr<int> number) {
+    std::cout << *number << std::endl;
+}
+void shared_ptr_1() {
+    // ARC 느낌
+    std::shared_ptr<int> number(new int);
+    *number = 4;
+    shared_ptr_1_foo(number);
+}
+
+void shared_ptr_2() {
+    int *a = new int;
+    std::shared_ptr<int> number(a);
+    
+//    delete a; // ERROR!
+}
+
+
+std::weak_ptr<int> number;
+void weak_ptr_1() {
+    {
+        std::shared_ptr<int> number2(new int);
+        number = number2;
+        *(number.lock()) = 7;
+        
+        if (std::shared_ptr<int> n = number.lock()) {
+            std::cout << *n << std::endl; // 4
+        } else {
+            std::cout << "expired!" << std::endl;
+        }
+    }
+    
+    if (std::shared_ptr<int> n = number.lock()) {
+        std::cout << n << std::endl; // 4
+    } else {
+        std::cout << "expired!" << std::endl;
+    }
+}
+
+void block_1() {
+    int x = 20;
+    {
+        std::cout << x << std::endl; // 20
+        int x = 200;
+        std::cout << x << std::endl; // 200
+    }
+    
+    std::cout << x << std::endl; // 20
+}
+
+void do_loop_1() {
+    int n = 10;
+    
+    do {
+        std::cout << n << std::endl;
+    } while (--n);
+}
+
+void cin_fail_1() {
+    using namespace std;
+    
+    // Ctrl + D
+    while (cin.fail() == false) {
+        cin.get();
+    }
+    
+    cout << "Done" << endl;
+}
+
+void cin_eof_1() {
+    using namespace std;
+    
+    int ch = cin.get();
+    
+    // Ctrl + D
+    while (ch != EOF) {
+        ch = cin.get();
+    }
+    
+    cout << "Done" << endl;
+}
+
+void char_functions_1() {
+    using namespace std;
+    
+    // check that value is alphanumeric, that is, a letter or a digit.
+    cout << isalnum(static_cast<int>('$')) << endl; // 0
+    cout << isalnum(static_cast<int>('A')) << endl; // 1
+    cout << isalnum(static_cast<int>('3')) << endl; // 1
+    
+    // alphabetic
+    cout << isalpha(static_cast<int>('a')) << endl; // 1
+    cout << isalpha(static_cast<int>('0')) << endl; // 0
+    
+    // isblank checks whether an input value is a space or a horizontal tab.
+    cout << isblank(static_cast<int>('\t')) << endl; // 1
+    cout << isblank(static_cast<int>(' ')) << endl; // 1
+    cout << isblank(static_cast<int>('\n')) << endl; // 0
+    
+    // iscntrl checks whether an input value is a control character.
+    cout << iscntrl(static_cast<int>('\0')) << endl; // 1
+    
+    // is digit
+    cout << isdigit(static_cast<int>('0')) << endl; // 1
+    cout << isdigit(static_cast<int>('A')) << endl; // 0
+    
+    // isgraph checks whether an input value is other than s space.
+    cout << isgraph(static_cast<int>(' ')) << endl; // 0
+    cout << isgraph(static_cast<int>('\n')) << endl; // 0
+    cout << isgraph(static_cast<int>('\0')) << endl; // 0
+    cout << isgraph(static_cast<int>('\t')) << endl; // 0
+    cout << isgraph(static_cast<int>('a')) << endl; // 1
+    
+    // isspace = !isgraph
+    cout << isspace(static_cast<int>(' ')) << endl; // 1
+    cout << isspace(static_cast<int>('\n')) << endl; // 1
+    cout << isspace(static_cast<int>('\0')) << endl; // 0 - `\0` represents always false
+    cout << isspace(static_cast<int>('\t')) << endl; // 1
+    cout << isspace(static_cast<int>('a')) << endl; // 0
+    
+    // isprint = isgraph + ' '
+    cout << isprint(static_cast<int>(' ')) << endl; // 1
+    cout << isprint(static_cast<int>('\n')) << endl; // 0
+    cout << isprint(static_cast<int>('\0')) << endl; // 0
+    cout << isprint(static_cast<int>('\t')) << endl; // 0
+    cout << isprint(static_cast<int>('a')) << endl; // 1
+    
+    // islower checks whether an input value is a lowercase letter.
+    cout << islower(static_cast<int>('a')) << endl; // 1
+    cout << islower(static_cast<int>('A')) << endl; // 0
+    cout << islower(static_cast<int>(' ')) << endl; // 0
+    cout << islower(static_cast<int>('3')) << endl; // 0
+    
+    // isupper
+    cout << isupper(static_cast<int>('a')) << endl; // 0
+    cout << isupper(static_cast<int>('A')) << endl; // 1
+    cout << isupper(static_cast<int>(' ')) << endl; // 0
+    cout << isupper(static_cast<int>('3')) << endl; // 0
+    
+    // https://grammarist.com/punctuation-marks/
+    cout << ispunct(static_cast<int>('#')) << endl; // 1
+    cout << ispunct(static_cast<int>('\\')) << endl; // 1
+    cout << ispunct(static_cast<int>('a')) << endl; // 0
+    
+    // isxdigit checks whether an input value is a hexadecimal digit character. (that is, 0-9, a-f, or A-f)
+    cout << isxdigit(static_cast<int>('F')) << endl;; // 1
+    cout << isxdigit(static_cast<int>('-')) << endl; // 0
+    
+    // tolower returns the lowercase version of that character.
+    cout << static_cast<char>(tolower(static_cast<int>('A'))) << endl; // a
+    
+    // toupper
+    cout << static_cast<char>(toupper(static_cast<int>('a'))) << endl; // A
+}
+
+void ofstream_1() {
+    using namespace std;
+    
+    filesystem::path path("/Users/pookjw/Desktop/test.txt");
+    ofstream outFile;
+    outFile.open(path);
+    
+    outFile.precision(2);
+    outFile.setf(ios_base::showpoint);
+    outFile << 3.12 << endl; // 3.1
+    outFile << 3.34 << endl; // 3.1
+    outFile << 3.56 << endl; // 3.1
+    outFile << 3.78 << endl; // 3.1
+    
+    outFile.close();
+}
+
+void ifstream_1() {
+    using namespace std;
+    
+    filesystem::path path("/Users/pookjw/Desktop/test.txt");
+    ifstream inFile;
+    inFile.open(path);
+    
+    while (inFile.good()) {
+        double value;
+        inFile >> value;
+        cout << "Value: " << value << endl;
+    }
+    
+    inFile.close();
+}
+
+inline double inline_1_foo(double x) { return x * x; };
+void inline_1() {
+    using namespace std;
+    double a, b;
+    
+    a = inline_1_foo(5.0);
+    b = inline_1_foo(8.0);
 }
 
 int main(int argc, const char * argv[]) {
-    pointer_3();
+    inline_1();
     return EXIT_SUCCESS;
 }
