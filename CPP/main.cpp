@@ -458,7 +458,318 @@ void string_7(void) {
     std::cout << R"+*((Hello)~~~~~+*)+*" << std::endl;
 }
 
+void structure_1(void) {
+    struct inflactable {
+        char name[20];
+        float volume;
+        double price;
+    };
+    
+    struct inflactable goose; // keyword struct required in C
+    
+    inflactable hat;
+    inflactable woopie_cushion;
+    inflactable mainframe;
+}
+
+void structure_2(void) {
+    struct inflacture {
+        char name[20];
+        std::string name2;
+        float volume;
+        double price;
+    };
+    
+    inflacture guest = {
+        "Glorious Gloria",
+        "",
+        1.88,
+        29.99
+    };
+    
+    inflacture pal = {
+        "Andacious Arthur",
+        "",
+        3.12,
+        32.99
+    };
+    
+    inflacture duck {"Daphne", "", 0.12, 9.98};
+    
+    pal = duck;
+    
+    std::cout << guest.name << std::endl;
+    std::cout << pal.volume << std::endl;
+}
+
+void structure_3(void) {
+    struct perks {
+        int key_number;
+        char car[12];
+    };
+    
+    struct perks_2 {
+        int key_number;
+        char car[12];
+    } mr_glitz = {
+        7, "Packard"
+    };
+    
+    struct perks a;
+    struct perks_2 b;
+    
+    // no tag
+    struct {
+        int x;
+        int y;
+    } position = {0, 0};
+    
+    struct {
+        int x;
+        int y;
+    } const position_2 {}; // {0, 0}
+}
+
+void structure_4(void) {
+    struct inflactable {
+        char name[20];
+        float volume;
+        double price;
+    };
+    
+    inflactable guests[2] = {
+        {"Bambi", 0.5, 21.99},
+        {"Godzilla"}
+    };
+    
+    inflactable guests_2[4] = {};
+    
+    inflactable guests_3[5] = {
+        {"A", 0.1, 0.4}
+    };
+    
+    struct {
+        int x;
+        int y;
+    } const position[2] = { {0, 0}, {3, 9} };
+}
+
+void structure_5(void) {
+    // declare bit fields
+    struct torgle_register {
+        unsigned int SN : 4;
+        unsigned int a : 100;
+        
+        unsigned int : 4;
+        bool goodIn : 1;
+    } torgle = { 4, 5, true };
+    
+    std::cout << torgle.goodIn << std::endl;
+}
+
+void union_1(void) {
+    union one4all {
+        int int_val;
+        long long_val;
+        double double_val;
+    };
+    
+    using namespace std;
+    
+    one4all pail;
+    pail.int_val = 15;
+    
+    (&pail)->int_val = 3;
+    
+    cout << __SIZEOF_INT__ << endl; // 4
+    cout << __SIZEOF_LONG__ << endl; // 8
+    cout << __SIZEOF_DOUBLE__ << endl; // 8
+    cout << sizeof(one4all) << endl; // 8
+}
+
+void union_2(void) {
+    struct widget {
+        char brand[20];
+        
+        enum data_type {
+            num = 0,
+            charr = 1
+        } type;
+        
+        union id {
+            long id_num;
+            char id_char[20];
+        } id_val;
+    };
+    
+    widget prize;
+    
+    const char id_char[5] = "Test";
+    
+//    strcpy(prize.id_val.id_char, id_char);
+//    strncpy(prize.id_val.id_char, id_char, 3);
+    memcpy(prize.id_val.id_char, id_char, sizeof id_char);
+    
+    prize.type = widget::data_type::charr;
+    
+    switch (prize.type) {
+        case widget::data_type::num:
+            std::cout << prize.id_val.id_num << std::endl;
+            break;
+        case widget::data_type::charr:
+            std::cout << prize.id_val.id_char << std::endl; // Never called.
+            break;
+        default:
+            break;
+    }
+}
+
+void enumeration_1(void) {
+    using namespace std;;
+    enum spectrum { red = 5, orange = 8, yellow, green, blue, violet, indigo, unltraviolet };
+    
+    cout << spectrum::orange << endl; // 8
+    cout << orange << endl; // 8
+    
+    cout << yellow << endl; // 9
+    
+    spectrum band;
+    cout << band << endl; // 0
+    
+    band = blue;
+//    band = 6; // Assigning to 'spectrum' from incompatible type 'int'
+    
+    // Type castings
+    band = static_cast<spectrum>(6);
+    band = (spectrum)8;
+    band = spectrum(8);
+    
+//    ++band; // Cannot increment expression of enum type 'spectrum'
+    band = static_cast<spectrum>(band + 1);
+    band = static_cast<spectrum>(band + orange);
+    
+    int a = 3;
+    a += band;
+}
+
+void enumeration_2(void) {
+    enum { a = 0, b, c, d, e = 1 };
+    
+    std::cout << a << std::endl; // 0
+    std::cout << b << std::endl; // 1
+    std::cout << c << std::endl; // 2
+    std::cout << d << std::endl; // 3
+    std::cout << e << std::endl; // 1
+}
+
+void malloc_1(void) {
+    char *charr;
+    char charr_2[5] = "ABCD";
+    void *p = malloc(sizeof(charr_2));
+    charr = static_cast<char *>(p);
+    
+    using namespace std;
+    
+    cout << sizeof(p) << endl;
+    
+    strcpy(charr, charr_2);
+    
+    cout << charr << endl;
+    free(p);
+}
+
+void new_delete_1(void) {
+    using namespace std;
+    int night = 1001;
+    int *pt = new int;
+    *pt = night;
+    
+    delete pt;
+    
+    int *pt2 = nullptr;
+    delete pt2;
+    
+    int *psome = new int[10];
+    delete [] psome;
+}
+
+void pointer_1() {
+    using namespace std;
+    
+    double wages[] = {10000.0, 20000.0, 30000.0};
+    short stacks[3] = {3, 2, 1};
+    
+    double *pw = wages;
+    short *ps = &stacks[0];
+    
+    cout << *pw << endl; // 10000
+    ++pw; // 8만큼 증가
+    cout << *pw << endl; // 20000
+    pw++;
+    cout << *pw << endl; // 30000
+    pw++;
+    cout << *pw << endl; // (random) 3.82415e-205
+    
+    //
+    
+    cout << *(stacks + 1) << endl; // 2
+    *(stacks + 2) = 6;
+    cout << *(stacks + 2) << endl; // 6
+    stacks[1] = 7;
+    cout << *(stacks + 1) << endl; // 7
+    cout << stacks[1] << endl; // 7
+}
+
+void pointer_2(void) {
+    int tacos[10] = {5, 2, 8, 4, 1, 2, 2, 4, 6, 8};
+    int *pt = tacos;
+    ++pt;
+    int *pe = &tacos[9];
+    --pe;
+    
+    int diff = pe - pt;
+    std::cout << diff << std::endl; // 7
+}
+
+void pointer_3(void) {
+    struct inflactable {
+        char name[20];
+        float volume;
+        double price;
+    } value = {};
+    
+    struct inflactable *pt = &value;
+    strcpy(pt->name, "Test");
+    
+    std::cout << value.name << std::endl; // Test
+}
+
+void vector_1() {
+    // heap
+    std::vector<int> vi;
+    std::vector<double> vd(10);
+}
+
+void array_7() {
+    // array uses the stack, and requires fixed size.
+    std::array<int, 5> ai;
+    std::array<double, 4> ad = {1.2, 2.1, 3.43, 4.3};
+}
+
+void vector_vs_array_1() {
+    using namespace std;
+    
+    double a1[4] = {1.2, 2.4, 3.6, 4.8};
+    
+    vector<double> a2;
+//    vector<double> a2(4); // fixing size
+    a2[0] = 3.;
+    a2[1] = 1.0 / 5.0;
+    a2[2] = 0.5;
+    a2[3] = 0.1;
+}
+
 int main(int argc, const char * argv[]) {
-    string_7();
+    pointer_3();
     return EXIT_SUCCESS;
 }
